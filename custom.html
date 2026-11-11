@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:title" content="Make It Your Family's Book | Station House Kids">
+<meta property="og:description" content="A personalized copy of When Daddy's at the Station with your kids' names, your station and your family photo.">
+<meta property="og:image" content="/img/custom-cover.jpg">
+<link rel="icon" href="/img/badge.jpg">
+<title>Your Family's Book</title>
+<meta name="description" content="A personalized copy of When Daddy's at the Station with your kids' names, your station and your family photo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sniglet:wght@400;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Saira+Stencil+One&display=swap">
+<style>
+/* Same night-at-the-station world as the home page: navy ground, porch-light amber, engine red.
+   Layout: form on the left, a live book preview that follows on the right; stacks on phones. */
+:root{
+  --night:#0f1a33; --night-2:#16244a; --ink:#f6efe2; --muted:#b9c0d4; --porch:#ffbf5a; --engine:#d7342b;
+  --paper:#fbf4e4; --paper-ink:#2a2547; --line:rgba(246,239,226,.14);
+  --display:"Sniglet","Arial Rounded MT Bold","Trebuchet MS",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --stencil:"Saira Stencil One",Impact,"Arial Narrow",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--night);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.6}
+a{color:var(--porch)}
+:focus-visible{outline:3px solid var(--porch);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:max(20px,env(safe-area-inset-left,0px)) max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.08;text-wrap:balance;margin:0}
+h1{font-size:clamp(36px,5.4vw,60px)}
+p{margin:0}
+.eyebrow{font-family:var(--stencil);letter-spacing:.12em;text-transform:uppercase;color:var(--porch);font-size:15px}
+header{border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:20px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font-family:var(--display);font-weight:800;font-size:22px;margin-right:auto}
+.brand img{width:46px;height:46px;border-radius:50%}
+header a.back{color:var(--muted);text-decoration:none;font-weight:700;font-size:16px}
+.intro{padding:48px 0 28px;display:grid;gap:14px;max-width:760px}
+.intro p{color:var(--muted);font-size:20px}
+.maker{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:40px;align-items:start;padding-bottom:72px}
+@media (max-width:900px){.maker{grid-template-columns:1fr}}
+
+form{display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
+fieldset{border:0;padding:0;margin:0;display:grid;grid-template-columns:minmax(0,1fr);gap:12px;min-width:0}
+legend{font-family:var(--display);font-weight:800;font-size:24px;padding:0;margin-bottom:4px}
+label{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;font-weight:700;font-size:16px}
+.hint{color:var(--muted);font-weight:400;font-size:15px}
+input[type=text],textarea{font:inherit;font-size:18px;color:var(--ink);background:var(--night-2);border:2px solid var(--line);border-radius:12px;padding:12px 14px;width:100%}
+input[type=text]:focus,textarea:focus{border-color:var(--porch);outline:0}
+textarea{min-height:96px;resize:vertical}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:end}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.pair{grid-template-columns:1fr}}
+.seg{display:inline-flex;justify-self:start;background:var(--night-2);border:2px solid var(--line);border-radius:999px;padding:3px}
+.seg label{display:block;position:relative;font-weight:700;cursor:pointer}
+.seg input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.seg span{display:block;padding:9px 18px;border-radius:999px;color:var(--muted)}
+.seg input:checked+span{background:var(--porch);color:#1c1503}
+.seg input:focus-visible+span{outline:3px solid var(--porch);outline-offset:3px}
+.file{border:2px dashed var(--line);border-radius:14px;padding:16px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.file input{font:inherit;font-size:16px;color:var(--muted);max-width:100%}
+.note{background:var(--night-2);border-left:4px solid var(--porch);border-radius:10px;padding:14px 16px;color:var(--muted);font-size:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--display);font-weight:800;font-size:20px;text-decoration:none;border-radius:999px;padding:16px 30px;border:0;cursor:pointer;background:var(--engine);color:#fff}
+.btn:hover{background:#ea4339}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.err{color:#ffb4ad;font-size:16px;min-height:1.4em}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400}
+.check input{width:22px;height:22px;margin-top:3px;accent-color:var(--porch);flex:none}
+
+.preview{position:sticky;top:20px;display:grid;gap:16px}
+@media (max-width:900px){.preview{position:static;order:-1}}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs button{font:inherit;font-weight:700;font-size:15px;color:var(--muted);background:transparent;border:2px solid var(--line);border-radius:999px;padding:7px 16px;cursor:pointer}
+.tabs button[aria-selected=true]{color:#1c1503;background:var(--porch);border-color:var(--porch)}
+.page{aspect-ratio:1;border-radius:14px;overflow:hidden;position:relative;background:var(--paper);color:var(--paper-ink);box-shadow:0 18px 50px rgba(0,0,0,.45);container-type:inline-size}
+.page[hidden]{display:none}
+.page img.art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cover .band{position:absolute;inset:0 0 auto;padding:6cqw 5cqw 9cqw;text-align:center;color:var(--paper);background:linear-gradient(rgba(20,32,74,.62) 78%,rgba(20,32,74,0))}
+.cover .t{font-family:var(--display);font-weight:800;font-size:9.4cqw;line-height:1.12;overflow-wrap:anywhere}
+.cover .s{font-family:var(--display);color:#f4c45a;font-size:3.9cqw;margin-top:1.6cqw}
+.cover .m{font-weight:700;font-size:3.4cqw;margin-top:1.6cqw;overflow-wrap:anywhere}
+.cover .st{font-size:2.9cqw;overflow-wrap:anywhere}
+.story .panel{position:absolute;left:5cqw;right:5cqw;bottom:5cqw;background:rgba(251,244,228,.94);border-radius:4cqw;padding:4cqw;font-size:3.5cqw;line-height:1.35;display:grid;gap:2cqw;overflow-wrap:anywhere}
+.ded{display:grid;place-content:center;justify-items:center;gap:4cqw;padding:7cqw;text-align:center}
+.ded .ph{width:52cqw;aspect-ratio:1;border-radius:6cqw;border:1cqw solid #f4c45a;background:#e3defa center/cover no-repeat;display:grid;place-items:center;color:#6d6790;font-size:3.2cqw}
+.ded .ph.has{color:transparent}
+.ded .msg{font-style:italic;font-size:4.2cqw;line-height:1.4;white-space:pre-line;overflow-wrap:anywhere}
+.ded .st{font-family:var(--display);font-weight:800;color:#c8352d;font-size:3.3cqw;overflow-wrap:anywhere}
+.cap{color:var(--muted);font-size:15px}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:16px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="/"><img src="img/badge.jpg" alt="Station House Kids crew badge">Station House Kids</a>
+    <a class="back" href="/#books">All books</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <p class="eyebrow">Personalized edition</p>
+    <h1>Make it your family's book</h1>
+    <p>Your kids' names in the story, your station on the cover, and your family photo on the dedication page. Printed one at a time and shipped to your door.</p>
+  </div>
+
+  <div class="maker">
+    <form id="order" novalidate>
+      <fieldset>
+        <legend>Who's the firefighter?</legend>
+        <div class="seg" role="radiogroup" aria-label="Firefighter">
+          <label><input type="radio" name="firefighter" value="dad" checked><span>Daddy</span></label>
+          <label><input type="radio" name="firefighter" value="mom"><span>Mommy</span></label>
+        </div>
+        <p class="note" id="mom-note" hidden>The words change to Mommy all the way through. The pictures in this edition still show a firefighter dad, with a mom at home.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>The two kids in the story</legend>
+        <div class="row">
+          <label>Big kid's first name<input type="text" name="kid1" maxlength="20" autocomplete="off" required></label>
+          <div class="seg" role="radiogroup" aria-label="Big kid is a">
+            <label><input type="radio" name="kid1_gender" value="girl" checked><span>Girl</span></label>
+            <label><input type="radio" name="kid1_gender" value="boy"><span>Boy</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <label>Little kid's first name<input type="text" name="kid2" maxlength="20" autocomplete="off" required></label>
+          <div class="seg" role="radiogroup" aria-label="Little kid is a">
+            <label><input type="radio" name="kid2_gender" value="girl" checked><span>Girl</span></label>
+            <label><input type="radio" name="kid2_gender" value="boy"><span>Boy</span></label>
+          </div>
+        </div>
+        <p class="hint">The story is written for two children, and the pictures show two girls.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Your station</legend>
+        <div class="pair">
+          <label>Station or company <span class="hint">Optional</span><input type="text" name="station" maxlength="30" placeholder="Station 7"></label>
+          <label>Department <span class="hint">Optional</span><input type="text" name="department" maxlength="50" placeholder="Tampa Fire Rescue"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Dedication page</legend>
+        <label>Your message <span class="hint">Up to 240 characters. Leave it blank and we'll write one with their names.</span>
+          <textarea name="dedication" maxlength="240"></textarea></label>
+        <div class="file">
+          <label for="photo">Family photo <span class="hint">Optional. JPG or PNG. It is used only to print your book.</span></label>
+          <input type="file" id="photo" name="photo" accept="image/jpeg,image/png">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label class="check"><input type="checkbox" name="approve" required><span>I checked the spelling of every name. The book prints exactly as shown in the preview.</span></label>
+        <p class="err" id="err" role="alert"></p>
+        <button class="btn" type="submit">Continue to checkout</button>
+        <p class="hint" id="status"></p>
+      </fieldset>
+    </form>
+
+    <aside class="preview" aria-label="Book preview">
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" aria-selected="true" data-p="cover">Cover</button>
+        <button type="button" role="tab" aria-selected="false" data-p="ded">Dedication</button>
+        <button type="button" role="tab" aria-selected="false" data-p="story">First page</button>
+      </div>
+      <div class="page cover" id="p-cover">
+        <img class="art" src="img/custom-cover.jpg" alt="">
+        <div class="band"><div class="t" id="c-title"></div><div class="s">13 Bedtime Prayers for Firefighter Families</div><div class="m" id="c-made"></div><div class="st" id="c-st"></div></div>
+      </div>
+      <div class="page ded" id="p-ded" hidden>
+        <div class="ph" id="d-ph">Your photo</div><div class="msg" id="d-msg"></div><div class="st" id="d-st"></div>
+      </div>
+      <div class="page story" id="p-story" hidden>
+        <img class="art" src="img/custom-page.jpg" alt="">
+        <div class="panel"><p id="s-1"></p><p id="s-2"></p></div>
+      </div>
+      <p class="cap">A quick preview. Names appear on every page of the printed book.</p>
+    </aside>
+  </div>
+</main>
+
+<footer><div class="wrap">Station House Kids · Bedtime books for firefighter families · Tampa Bay, Florida</div></footer>
+
+<script>
+// Where finished orders are sent. Left empty until checkout is connected; the form then only previews.
+const ORDER_ENDPOINT = '';
+
+const f = document.getElementById('order'), $ = id => document.getElementById(id);
+const NAME = /^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ' \-]{0,19}$/;
+const v = n => (f.elements[n].value || '').trim().replace(/\s+/g, ' ');
+
+function render() {
+  const dad = v('firefighter') === 'dad', P = dad ? 'Daddy' : 'Mommy';
+  const he = dad ? 'He' : 'She', his = dad ? 'his' : 'her';
+  const k1 = v('kid1') || 'Big Kid', k2 = v('kid2') || 'Little Kid';
+  const st = [v('station'), v('department')].filter(Boolean).join(' · ');
+  $('mom-note').hidden = dad;
+  $('c-title').textContent = `When ${P}'s at the Station`;
+  $('c-made').textContent = `Made for ${k1} and ${k2}`;
+  $('c-st').textContent = st; $('d-st').textContent = st;
+  $('d-msg').textContent = f.elements.dedication.value.trim() || `For ${k1} and ${k2}, who pray for ${P} every shift.`;
+  $('s-1').textContent = `This is our ${P.toLowerCase()}. ${he}'s a firefighter.`;
+  $('s-2').textContent = `On ${his} day off, ${P} took ${k1} and ${k2} to visit the fire station. They met ${his} crew, climbed past the big red engine, and saw the bunk room where the firefighters sleep.`;
+}
+f.addEventListener('input', render); render();
+
+let photoUrl = null;
+$('photo').addEventListener('change', e => {
+  const file = e.target.files[0], ph = $('d-ph');
+  if (photoUrl) URL.revokeObjectURL(photoUrl);
+  if (file && /^image\/(jpeg|png)$/.test(file.type)) {
+    photoUrl = URL.createObjectURL(file); ph.style.backgroundImage = `url("${photoUrl}")`; ph.classList.add('has'); show('ded');
+  } else { photoUrl = null; ph.style.backgroundImage = ''; ph.classList.remove('has'); if (file) e.target.value = ''; }
+});
+
+function show(p) {
+  document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.p === p));
+  ['cover', 'ded', 'story'].forEach(k => $('p-' + k).hidden = k !== p);
+}
+document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => show(b.dataset.p)));
+f.elements.dedication.addEventListener('focus', () => show('ded'));
+['station', 'department'].forEach(n => f.elements[n].addEventListener('focus', () => show('cover')));
+
+f.addEventListener('submit', async e => {
+  e.preventDefault();
+  const err = $('err'); err.textContent = '';
+  for (const n of ['kid1', 'kid2']) if (!NAME.test(v(n))) { err.textContent = 'Please enter a first name for each child, letters only (up to 20).'; f.elements[n].focus(); return; }
+  const photo = $('photo').files[0];
+  if (photo && photo.size > 15 * 1024 * 1024) { err.textContent = 'That photo is over 15 MB. Please choose a smaller one.'; return; }
+  if (!f.elements.approve.checked) { err.textContent = 'Please confirm you checked the spelling.'; f.elements.approve.focus(); return; }
+  if (!ORDER_ENDPOINT) { $('status').textContent = 'Ordering opens soon. Your preview is ready above.'; return; }
+  const btn = f.querySelector('button[type=submit]'); btn.disabled = true; $('status').textContent = 'Saving your book…';
+  try {
+    const r = await fetch(ORDER_ENDPOINT, { method: 'POST', body: new FormData(f) });
+    const d = await r.json();
+    if (!r.ok || !d.checkout_url) throw new Error(d.error || 'Something went wrong');
+    location.href = d.checkout_url;
+  } catch (x) { err.textContent = 'We could not save your order. Please try again.'; btn.disabled = false; $('status').textContent = ''; }
+});
+</script>
+</body>
+</html>
