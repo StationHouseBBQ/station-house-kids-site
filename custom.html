@@ -354,10 +354,19 @@ $('next').addEventListener('click', async () => {
   if (!ORDER_ENDPOINT) { $('status').textContent = 'Ordering opens soon. Nothing has been sent or saved.'; return; }
   $('next').disabled = true; $('status').textContent = 'Saving your book…';
   try { const fd = new FormData(f); fd.append('kids', JSON.stringify(kids()));
+    // shrink every photo in the browser first: phone photos are far bigger than the drawing needs
+    for (const inp of f.querySelectorAll('input[type=file]')) { if (inp.files[0]) fd.set(inp.name, await shrink(inp.files[0]), inp.name + '.jpg'); else fd.delete(inp.name); }
     const r = await fetch(ORDER_ENDPOINT, { method: 'POST', body: fd }), d = await r.json();
     if (!r.ok || !d.checkout_url) throw new Error(); location.href = d.checkout_url;
   } catch (x) { $('err').textContent = 'We could not save your order. Please try again.'; $('next').disabled = false; $('status').textContent = ''; }
 });
+async function shrink(file) {
+  const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
+  const k = Math.min(1, 1400 / Math.max(bmp.width, bmp.height)), c = document.createElement('canvas');
+  c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+  c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+  return await new Promise(r => c.toBlob(r, 'image/jpeg', 0.85));
+}
 f.addEventListener('submit', e => e.preventDefault());
 addKid(); addKid();
 go(0); window.scrollTo(0, 0);
